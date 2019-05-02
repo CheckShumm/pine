@@ -13,6 +13,7 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     return new Scaffold(
         appBar: new AppBar(
           title: const Text('New Task'),
@@ -28,9 +29,9 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
                   child: TextFormField(
                     decoration: InputDecoration(
                         filled: true,
-                        fillColor: Colors.green[50],
+                        fillColor: theme.primaryColorLight,
                         hintText: "Math Homework",
-                        hintStyle: new TextStyle(color: Colors.green[300]),
+                        hintStyle: new TextStyle(color: theme.primaryColor),
                         labelText: 'Task Title',
                         border: OutlineInputBorder()),
                     controller: titleController,
@@ -40,9 +41,9 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
                   child: TextFormField(
                       decoration: InputDecoration(
                           filled: true,
-                          fillColor: Colors.green[50],
+                          fillColor: theme.primaryColorLight,
                           hintText: "Math Homework",
-                          hintStyle: new TextStyle(color: Colors.green[300]),
+                          hintStyle: new TextStyle(color: theme.primaryColor),
                           labelText: 'Description',
                           border: OutlineInputBorder()),
                       controller: descriptionController)),
@@ -51,9 +52,9 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
                   child: TextFormField(
                     decoration: InputDecoration(
                         filled: true,
-                        fillColor: Colors.green[50],
+                        fillColor: theme.primaryColorLight,
                         hintText: "Math Homework",
-                        hintStyle: new TextStyle(color: Colors.green[300]),
+                        hintStyle: new TextStyle(color: theme.primaryColor),
                         labelText: 'Type',
                         border: OutlineInputBorder()),
                     controller: typeController,

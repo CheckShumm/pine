@@ -18,7 +18,7 @@ class TaskBloc {
 
   updateTasks(title, description, type) {
     this._tasks.add(
-        new Task(title: title, description: description, type: type));
+        new Task(id: _tasks.length, title: title, description: description, type: type));
     _taskSubject.sink.add(this._tasks);
   }
 

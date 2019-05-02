@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pine/src/blocs/task_bloc.dart';
 import 'package:pine/src/data/task.dart';
 import 'package:pine/src/screens/create_task.dart';
-
+import 'package:pine/src/widgets/ReorderableListSimple.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -31,14 +31,15 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: StreamBuilder<List<Task>>(
             stream: bloc.getSubject().stream,
-            builder: (context, snapshot) => ListView(
+            builder: (context, snapshot) => ReorderableListSimple(
                   children: snapshot.data.map(_buildItem).toList(),
+                  onReorder: this._reorderCallBack,
                 )),
       ),
       floatingActionButton: FloatingActionButton(
         elevation: 5,
         onPressed: () {
-         _openAddTaskDialog(); 
+          _openAddTaskDialog();
         }, // task bloc update events
         tooltip: 'Increment',
         child: Icon(Icons.add),
@@ -46,46 +47,44 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  void _reorderCallBack(int oldIndex, int newIndex) {}
+
   void _openAddTaskDialog() {
     Navigator.of(context).push(new MaterialPageRoute<Null>(
-      builder: (BuildContext context) {
-        return new CreateTaskDialog();
-      },
-      fullscreenDialog: true
-    ));
+        builder: (BuildContext context) {
+          return new CreateTaskDialog();
+        },
+        fullscreenDialog: true));
   }
 
   Widget _buildItem(Task task) {
     log('Task Title: $task.title');
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: new Card(
-        color: Colors.green[50],
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            ListTile(
-              leading: Icon(Icons.album),
-              title: new Text(task.title),
-              subtitle: new Text(task.description),
+    return new Card(
+      key: new ValueKey(task.id),
+      color: Colors.green[50],
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          ListTile(
+            title: new Text(task.title),
+            subtitle: new Text(task.description),
+          ),
+          ButtonTheme.bar(
+            // make buttons use the appropriate styles for cards
+            child: ButtonBar(
+              children: <Widget>[
+                FlatButton(
+                  child: const Text('View'),
+                  onPressed: () {/* ... */},
+                ),
+                FlatButton(
+                  child: const Text('Edit'),
+                  onPressed: () {},
+                ),
+              ],
             ),
-            ButtonTheme.bar(
-              // make buttons use the appropriate styles for cards
-              child: ButtonBar(
-                children: <Widget>[
-                  FlatButton(
-                    child: const Text('View'),
-                    onPressed: () {/* ... */},
-                  ),
-                  FlatButton(
-                    child: const Text('Edit'),
-                    onPressed: () {},
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
