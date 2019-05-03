@@ -15,6 +15,7 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     return new Scaffold(
+        backgroundColor: Colors.green[50],
         appBar: new AppBar(
           title: const Text('New Task'),
         ),
@@ -29,7 +30,7 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
                   child: TextFormField(
                     decoration: InputDecoration(
                         filled: true,
-                        fillColor: theme.primaryColorLight,
+                        fillColor: theme.canvasColor,
                         hintText: "Math Homework",
                         hintStyle: new TextStyle(color: theme.primaryColor),
                         labelText: 'Task Title',
@@ -41,7 +42,7 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
                   child: TextFormField(
                       decoration: InputDecoration(
                           filled: true,
-                          fillColor: theme.primaryColorLight,
+                          fillColor: theme.canvasColor,
                           hintText: "Math Homework",
                           hintStyle: new TextStyle(color: theme.primaryColor),
                           labelText: 'Description',
@@ -52,17 +53,20 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
                   child: TextFormField(
                     decoration: InputDecoration(
                         filled: true,
-                        fillColor: theme.primaryColorLight,
+                        fillColor: theme.canvasColor,
                         hintText: "Math Homework",
                         hintStyle: new TextStyle(color: theme.primaryColor),
                         labelText: 'Type',
-                        border: OutlineInputBorder()),
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(color: theme.primaryColor))),
                     controller: typeController,
                   )),
               Padding(
                 padding: EdgeInsets.only(top: 16.0),
-                child: RaisedButton(
-                  color: Colors.green,
+                child: MaterialButton(
+                  height: 50,
+                  minWidth: 200,
+                  color: theme.primaryColor,
                   textColor: Colors.white,
                   onPressed: () {
                     print('Add a task');
@@ -70,7 +74,7 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
                         descriptionController.text, typeController.text);
                     Navigator.pop(context);
                   },
-                  child: const Text('Create'),
+                  child: const Text('Create', style: TextStyle(fontSize: 20)),
                 ),
               ),
             ],

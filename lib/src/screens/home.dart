@@ -25,6 +25,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.lightGreen[50],
       appBar: AppBar(
         title: Text(widget.title),
       ),
@@ -58,33 +59,39 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _buildItem(Task task) {
-    log('Task Title: $task.title');
-    return new Card(
-      key: new ValueKey(task.id),
-      color: Colors.green[50],
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          ListTile(
-            title: new Text(task.title),
-            subtitle: new Text(task.description),
-          ),
-          ButtonTheme.bar(
-            // make buttons use the appropriate styles for cards
-            child: ButtonBar(
-              children: <Widget>[
-                FlatButton(
-                  child: const Text('View'),
-                  onPressed: () {/* ... */},
-                ),
-                FlatButton(
-                  child: const Text('Edit'),
-                  onPressed: () {},
-                ),
-              ],
-            ),
-          ),
-        ],
+    final ThemeData theme = Theme.of(context);
+    return Padding(
+      padding: EdgeInsets.all(8.0),
+      child: Container(
+        decoration: BoxDecoration(
+            border: new Border(
+                left: new BorderSide(width: 1.0, color: theme.primaryColor))),
+        child: Column(
+          key: new ValueKey(task.id),
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                    padding: EdgeInsets.only(left: 16.0),
+                    child: Text(task.title,
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            color: theme.primaryColor,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold)))),
+            Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                    padding: EdgeInsets.fromLTRB(32.0,4.0,0,0),
+                    child: Text(task.description,
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            color: theme.primaryColor,
+                            fontSize: 16.0,
+                            fontStyle: FontStyle.italic)))),
+          ],
+        ),
       ),
     );
   }
