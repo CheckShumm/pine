@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_reorderable_list/flutter_reorderable_list.dart';
+import 'package:pine/src/screens/view_task.dart';
 
 enum ReorderableListSimpleSide { Right, Left }
 
@@ -207,13 +208,22 @@ class ReorderableItemSimple extends StatelessWidget {
       key: key,
       childBuilder: (BuildContext context, ReorderableItemState state) {
         BoxDecoration decoration = _decoration(context, state);
-        return Container(
-          //color: teheme.cardColor,
-          decoration: decoration,
-          margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
-          child: Opacity(
-            opacity: state == ReorderableItemState.placeholder ? 0.0 : 1.0,
-            child: _buildInnerItem(context),
+        return GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(new MaterialPageRoute<Null>(
+                builder: (BuildContext context) {
+                  return new ViewTask();
+                },
+                fullscreenDialog: true));
+          },
+          child: Container(
+            //color: teheme.cardColor,
+            decoration: decoration,
+            margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+            child: Opacity(
+              opacity: state == ReorderableItemState.placeholder ? 0.0 : 1.0,
+              child: _buildInnerItem(context),
+            ),
           ),
         );
       },

@@ -14,71 +14,97 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    return new Scaffold(
-        backgroundColor: Colors.green[50],
-        appBar: new AppBar(
-          title: const Text('New Task'),
-        ),
-        body: new SingleChildScrollView(
-            child: Center(
-                child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            children: <Widget>[
-              Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                        filled: true,
-                        fillColor: theme.canvasColor,
-                        hintText: "Math Homework",
-                        hintStyle: new TextStyle(color: theme.primaryColor),
-                        labelText: 'Task Title',
-                        border: OutlineInputBorder()),
-                    controller: titleController,
-                  )),
-              Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: TextFormField(
-                      decoration: InputDecoration(
-                          filled: true,
-                          fillColor: theme.canvasColor,
-                          hintText: "Math Homework",
-                          hintStyle: new TextStyle(color: theme.primaryColor),
-                          labelText: 'Description',
-                          border: OutlineInputBorder()),
-                      controller: descriptionController)),
-              Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                        filled: true,
-                        fillColor: theme.canvasColor,
-                        hintText: "Math Homework",
-                        hintStyle: new TextStyle(color: theme.primaryColor),
-                        labelText: 'Type',
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(color: theme.primaryColor))),
-                    controller: typeController,
-                  )),
-              Padding(
-                padding: EdgeInsets.only(top: 16.0),
-                child: MaterialButton(
-                  height: 50,
-                  minWidth: 200,
+    final double width = MediaQuery.of(context).size.width;
+
+    return new AlertDialog(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(32.0))),
+      contentPadding: EdgeInsets.only(top: 10.0),
+      content: Container(
+        width: 300.0,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
+                  child: Text(
+                    "Add Task",
+                    style: TextStyle(
+                      fontSize: 24.0,
+                      color: theme.primaryColor,
+                    ),
+                  ),
+                ),
+                Divider(
                   color: theme.primaryColor,
-                  textColor: Colors.white,
-                  onPressed: () {
-                    print('Add a task');
-                    bloc.updateTasks(titleController.text,
-                        descriptionController.text, typeController.text);
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Create', style: TextStyle(fontSize: 20)),
+                  height: 4.0,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 16.0, right: 16.0),
+                  child: TextField(
+                    controller: titleController,
+                    decoration: InputDecoration(
+                      hintText: "E.g. Math Homework",
+                      hintStyle: new TextStyle(color: theme.primaryColor),
+                      labelText: 'Task',
+                      border: InputBorder.none,
+                    ),
+                    maxLines: 1,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 5.0,
+            ),
+            Divider(
+              color: theme.primaryColor,
+              height: 4.0,
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 16.0, right: 16.0),
+              child: TextField(
+                controller: descriptionController,
+                textAlign: TextAlign.left,
+                decoration: InputDecoration(
+                  hintText: "E.g. \nAssignment 3 \nquestions 3-5",
+                  hintStyle: new TextStyle(color: theme.primaryColor),
+                  labelText: 'Description',
+                  border: InputBorder.none,
+                ),
+                maxLines: 5,
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                bloc.updateTasks(titleController.text,
+                    descriptionController.text, typeController.text);
+                Navigator.pop(context);
+              },
+              child: Container(
+                padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+                decoration: BoxDecoration(
+                  color: theme.primaryColor,
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(32.0),
+                      bottomRight: Radius.circular(32.0)),
+                ),
+                child: Text(
+                  "Create Task",
+                  style: TextStyle(color: Colors.white),
+                  textAlign: TextAlign.center,
                 ),
               ),
-            ],
-          ),
-        ))));
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

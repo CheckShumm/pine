@@ -40,7 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         elevation: 5,
         onPressed: () {
-          _openAddTaskDialog();
+          _createTaskDialog();
         }, // task bloc update events
         tooltip: 'Increment',
         child: Icon(Icons.add),
@@ -50,12 +50,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _reorderCallBack(int oldIndex, int newIndex) {}
 
-  void _openAddTaskDialog() {
-    Navigator.of(context).push(new MaterialPageRoute<Null>(
+  Future<void> _createTaskDialog() async {
+    showDialog<void>(
+        
+        context: context,
         builder: (BuildContext context) {
-          return new CreateTaskDialog();
-        },
-        fullscreenDialog: true));
+          return CreateTaskDialog();
+        });
   }
 
   Widget _buildItem(Task task) {
@@ -83,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
-                    padding: EdgeInsets.fromLTRB(32.0,4.0,0,0),
+                    padding: EdgeInsets.fromLTRB(32.0, 4.0, 0, 0),
                     child: Text(task.description,
                         textAlign: TextAlign.left,
                         style: TextStyle(
