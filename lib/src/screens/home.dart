@@ -1,9 +1,12 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:pine/src/blocs/task_bloc.dart';
 import 'package:pine/src/data/task.dart';
 import 'package:pine/src/screens/create_task.dart';
+import 'package:pine/src/screens/view_task.dart';
 import 'package:pine/src/widgets/ReorderableListSimple.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -25,10 +28,22 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.lightGreen[50],
+      backgroundColor: Colors.green[300],
       appBar: AppBar(
-        title: Text(widget.title),
+        backgroundColor: Colors.green[300],
+        title: Text(
+          widget.title,
+        ),
+        centerTitle: true,
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: Icon(Icons.help),
+          ),
+        ],
+        elevation: 0.0,
       ),
+      drawer: Drawer(),
       body: Center(
         child: StreamBuilder<List<Task>>(
             stream: bloc.getSubject().stream,
@@ -38,7 +53,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 )),
       ),
       floatingActionButton: FloatingActionButton(
-        elevation: 5,
+        elevation: 8,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.green,
         onPressed: () {
           _createTaskDialog();
         }, // task bloc update events
@@ -52,7 +69,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _createTaskDialog() async {
     showDialog<void>(
-        
         context: context,
         builder: (BuildContext context) {
           return CreateTaskDialog();
@@ -63,35 +79,46 @@ class _MyHomePageState extends State<MyHomePage> {
     final ThemeData theme = Theme.of(context);
     return Padding(
       padding: EdgeInsets.all(8.0),
-      child: Container(
-        decoration: BoxDecoration(
-            border: new Border(
-                left: new BorderSide(width: 1.0, color: theme.primaryColor))),
-        child: Column(
-          key: new ValueKey(task.id),
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                    padding: EdgeInsets.only(left: 16.0),
-                    child: Text(task.title,
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            color: theme.primaryColor,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold)))),
-            Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                    padding: EdgeInsets.fromLTRB(32.0, 4.0, 0, 0),
-                    child: Text(task.description,
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            color: theme.primaryColor,
-                            fontSize: 16.0,
-                            fontStyle: FontStyle.italic)))),
-          ],
+      child: GestureDetector(
+        onTap: () {
+         Navigator.of(context).push(MaterialPageRoute<Null>(
+              builder: (BuildContext context) {
+                return new ViewTask(task: task);
+              },
+              fullscreenDialog: true)).then((val) => {
+                FlutterStatusbarcolor.setStatusBarColor(Colors.green[300])
+              });
+        },
+        child: Container(
+          decoration: BoxDecoration(
+              border: new Border(
+                  left: new BorderSide(width: 1.0, color: theme.primaryColor))),
+          child: Column(
+            key: new ValueKey(task.id),
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                      padding: EdgeInsets.only(left: 16.0),
+                      child: Text(task.title,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              color: theme.primaryColor,
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold)))),
+              Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                      padding: EdgeInsets.fromLTRB(32.0, 4.0, 0, 0),
+                      child: Text(task.description,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              color: theme.primaryColor,
+                              fontSize: 16.0,
+                              fontStyle: FontStyle.italic)))),
+            ],
+          ),
         ),
       ),
     );

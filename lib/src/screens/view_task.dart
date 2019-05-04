@@ -1,85 +1,65 @@
-
 import 'package:flutter/material.dart';
-import 'package:pine/src/blocs/task_bloc.dart';
+import 'package:flutter/services.dart';
+import 'package:pine/src/data/task.dart';
+import 'package:pine/src/utils/CustomShapeClipper.dart';
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 
 class ViewTask extends StatefulWidget {
+  Task task;
+  ViewTask({this.task});
+
   @override
   _ViewTaskState createState() => _ViewTaskState();
 }
 
 class _ViewTaskState extends State<ViewTask> {
-  TextEditingController titleController = new TextEditingController();
-  TextEditingController descriptionController = new TextEditingController();
-  TextEditingController typeController = new TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    FlutterStatusbarcolor.setStatusBarColor(Colors.green);
+
     return new Scaffold(
         backgroundColor: Colors.green[50],
         appBar: new AppBar(
-          title: const Text('New Task'),
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: Icon(Icons.edit),
+            ),
+          ],
+          elevation: 0,
+          title: null,
         ),
-        body: new SingleChildScrollView(
-            child: Center(
-                child: Padding(
-          padding: EdgeInsets.all(16.0),
+        body: Container(
+          color:Colors.green[100],
           child: Column(
             children: <Widget>[
+              ClipPath(
+                  clipper: CustomShapeClipper(),
+                  child: Container(
+                      height: MediaQuery.of(context).size.height * 0.30,
+                      color: theme.primaryColor,
+                      child: Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(left: 32.0),
+                            child: Text(widget.task.title,
+                                style: TextStyle(
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white)),
+                          )
+                        ],
+                      ))),
               Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                        filled: true,
-                        fillColor: theme.canvasColor,
-                        hintText: "Math Homework",
-                        hintStyle: new TextStyle(color: theme.primaryColor),
-                        labelText: 'Task Title',
-                        border: OutlineInputBorder()),
-                    controller: titleController,
-                  )),
-              Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: TextFormField(
-                      decoration: InputDecoration(
-                          filled: true,
-                          fillColor: theme.canvasColor,
-                          hintText: "Math Homework",
-                          hintStyle: new TextStyle(color: theme.primaryColor),
-                          labelText: 'Description',
-                          border: OutlineInputBorder()),
-                      controller: descriptionController)),
-              Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                        filled: true,
-                        fillColor: theme.canvasColor,
-                        hintText: "Math Homework",
-                        hintStyle: new TextStyle(color: theme.primaryColor),
-                        labelText: 'Type',
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(color: theme.primaryColor))),
-                    controller: typeController,
-                  )),
-              Padding(
-                padding: EdgeInsets.only(top: 16.0),
-                child: MaterialButton(
-                  height: 50,
-                  minWidth: 200,
-                  color: theme.primaryColor,
-                  textColor: Colors.white,
-                  onPressed: () {
-                    print('Add a task');
-                    bloc.updateTasks(titleController.text,
-                        descriptionController.text, typeController.text);
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Create', style: TextStyle(fontSize: 20)),
-                ),
+                padding: EdgeInsets.all(32.0),
+                child: 
+                    Text(widget.task.description,
+                        style: TextStyle(
+                            fontSize: 18.0, color: theme.primaryColor)),
               ),
             ],
           ),
-        ))));
+        ));
   }
 }

@@ -186,10 +186,11 @@ class ReorderableItemSimple extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     if (state == ReorderableItemState.dragProxy ||
         state == ReorderableItemState.dragProxyFinished) {
-      return BoxDecoration(color: Colors.lightGreenAccent[50]);
+      return BoxDecoration(color: Colors.green[100]);
     } else {
       bool placeholder = state == ReorderableItemState.placeholder;
       return BoxDecoration(
+          
           border: Border(
               top: !placeholder
                   ? Divider.createBorderSide(context)
@@ -208,15 +209,7 @@ class ReorderableItemSimple extends StatelessWidget {
       key: key,
       childBuilder: (BuildContext context, ReorderableItemState state) {
         BoxDecoration decoration = _decoration(context, state);
-        return GestureDetector(
-          onTap: () {
-            Navigator.of(context).push(new MaterialPageRoute<Null>(
-                builder: (BuildContext context) {
-                  return new ViewTask();
-                },
-                fullscreenDialog: true));
-          },
-          child: Container(
+        return  Container(
             //color: teheme.cardColor,
             decoration: decoration,
             margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
@@ -224,7 +217,6 @@ class ReorderableItemSimple extends StatelessWidget {
               opacity: state == ReorderableItemState.placeholder ? 0.0 : 1.0,
               child: _buildInnerItem(context),
             ),
-          ),
         );
       },
     );
