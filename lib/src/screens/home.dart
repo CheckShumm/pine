@@ -28,9 +28,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green[300],
+      backgroundColor: Colors.green[100],
       appBar: AppBar(
-        backgroundColor: Colors.green[300],
+        backgroundColor: Colors.green,
         title: Text(
           widget.title,
         ),
@@ -44,14 +44,9 @@ class _MyHomePageState extends State<MyHomePage> {
         elevation: 0.0,
       ),
       drawer: Drawer(),
-      body: Center(
-        child: StreamBuilder<List<Task>>(
-            stream: bloc.getSubject().stream,
-            builder: (context, snapshot) => ReorderableListSimple(
-                  children: snapshot.data.map(_buildItem).toList(),
-                  onReorder: this._reorderCallBack,
-                )),
-      ),
+      body: Center(child: StreamBuilder<List<Task>>(
+          stream: bloc.getSubject().stream,
+          builder: (context, snapshot) => taskList(snapshot.data) )),
       floatingActionButton: FloatingActionButton(
         elevation: 8,
         backgroundColor: Colors.white,
@@ -67,6 +62,22 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _reorderCallBack(int oldIndex, int newIndex) {}
 
+  Widget taskList(List<Task> data) {
+    if (bloc.getTasks().isEmpty) {
+      return Text('Get ready for tomorrow \nAdd some tasks!',
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.white, fontSize: 20.0));
+    } else {
+      return Padding(
+        padding: const EdgeInsets.only(top: 8.0),
+        child: ReorderableListSimple(
+                    children: data.map(_buildItem).toList(),
+                    onReorder: this._reorderCallBack,
+                  ),
+      );
+    }
+  }
+
   Future<void> _createTaskDialog() async {
     showDialog<void>(
         context: context,
@@ -77,24 +88,28 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _buildItem(Task task) {
     final ThemeData theme = Theme.of(context);
+    // Map<Key, Task> tasks = bloc.getTasks();
+    // Task task = tasks[key];
+    print(task.title);
     return Padding(
       padding: EdgeInsets.all(8.0),
       child: GestureDetector(
         onTap: () {
-         Navigator.of(context).push(MaterialPageRoute<Null>(
-              builder: (BuildContext context) {
-                return new ViewTask(task: task);
-              },
-              fullscreenDialog: true)).then((val) => {
-                FlutterStatusbarcolor.setStatusBarColor(Colors.green[300])
-              });
+          Navigator.of(context)
+              .push(MaterialPageRoute<Null>(
+                  builder: (BuildContext context) {
+                    return new ViewTask(task: task);
+                  },
+                  fullscreenDialog: true))
+              .then((val) =>
+                  {FlutterStatusbarcolor.setStatusBarColor(Colors.green)});
         },
         child: Container(
           decoration: BoxDecoration(
               border: new Border(
                   left: new BorderSide(width: 1.0, color: theme.primaryColor))),
           child: Column(
-            key: new ValueKey(task.id),
+            key: new UniqueKey(),
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Align(

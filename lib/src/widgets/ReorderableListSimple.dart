@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_reorderable_list/flutter_reorderable_list.dart';
+import 'package:pine/src/blocs/task_bloc.dart';
+import 'package:pine/src/data/task.dart';
 import 'package:pine/src/screens/view_task.dart';
 
 enum ReorderableListSimpleSide { Right, Left }
@@ -103,6 +105,9 @@ class _ReorderableListSimpleState extends State<ReorderableListSimple> {
           _children.removeAt(draggingIndex);
           _children.insert(newPositionIndex, item);
         });
+        
+        bloc.swap(draggingIndex, newPositionIndex);
+        
 
         return true;
       },

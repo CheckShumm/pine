@@ -19,7 +19,7 @@ class _ViewTaskState extends State<ViewTask> {
     FlutterStatusbarcolor.setStatusBarColor(Colors.green);
 
     return new Scaffold(
-        backgroundColor: Colors.green[50],
+        backgroundColor: Colors.green[75],
         appBar: new AppBar(
           actions: <Widget>[
             Padding(
@@ -31,7 +31,7 @@ class _ViewTaskState extends State<ViewTask> {
           title: null,
         ),
         body: Container(
-          color:Colors.green[100],
+          color:Colors.green[75],
           child: Column(
             children: <Widget>[
               ClipPath(

@@ -7,7 +7,7 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    FlutterStatusbarcolor.setStatusBarColor(Colors.green[300]);
+    FlutterStatusbarcolor.setStatusBarColor(Colors.green);
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
