@@ -28,7 +28,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green[400],
+      backgroundColor: Colors.green[100],
       appBar: AppBar(
         backgroundColor: Colors.green,
         title: Text(
@@ -44,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
         elevation: 0.0,
       ),
       drawer: Drawer(),
-      body: Center(child: StreamBuilder<Map<Key, Task>>(
+      body: Center(child: StreamBuilder<List<Task>>(
           stream: bloc.getSubject().stream,
           builder: (context, snapshot) => taskList(snapshot.data) )),
       floatingActionButton: FloatingActionButton(
@@ -62,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _reorderCallBack(int oldIndex, int newIndex) {}
 
-  Widget taskList(Map<Key, Task> data) {
+  Widget taskList(List<Task> data) {
     if (bloc.getTasks().isEmpty) {
       return Text('Get ready for tomorrow \nAdd some tasks!',
           textAlign: TextAlign.center,
@@ -71,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
       return Padding(
         padding: const EdgeInsets.only(top: 8.0),
         child: ReorderableListSimple(
-                    children: data.keys.map(_buildItem).toList(),
+                    children: data.map(_buildItem).toList(),
                     onReorder: this._reorderCallBack,
                   ),
       );
@@ -86,10 +86,10 @@ class _MyHomePageState extends State<MyHomePage> {
         });
   }
 
-  Widget _buildItem(Key key) {
+  Widget _buildItem(Task task) {
     final ThemeData theme = Theme.of(context);
-    Map<Key, Task> tasks = bloc.getTasks();
-    Task task = tasks[key];
+    // Map<Key, Task> tasks = bloc.getTasks();
+    // Task task = tasks[key];
     print(task.title);
     return Padding(
       padding: EdgeInsets.all(8.0),
@@ -102,14 +102,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   },
                   fullscreenDialog: true))
               .then((val) =>
-                  {FlutterStatusbarcolor.setStatusBarColor(Colors.green[300])});
+                  {FlutterStatusbarcolor.setStatusBarColor(Colors.green)});
         },
         child: Container(
           decoration: BoxDecoration(
               border: new Border(
                   left: new BorderSide(width: 1.0, color: theme.primaryColor))),
           child: Column(
-            key: key,
+            key: new UniqueKey(),
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Align(

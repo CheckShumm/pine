@@ -106,7 +106,7 @@ class _ReorderableListSimpleState extends State<ReorderableListSimple> {
           _children.insert(newPositionIndex, item);
         });
         
-        bloc.swap(draggedItem, newPosition);
+        bloc.swap(draggingIndex, newPositionIndex);
         
 
         return true;
