@@ -28,7 +28,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green[100],
+      backgroundColor: Colors.green[50],
       appBar: AppBar(
         backgroundColor: Colors.green,
         title: Text(
@@ -49,8 +49,8 @@ class _MyHomePageState extends State<MyHomePage> {
           builder: (context, snapshot) => taskList(snapshot.data) )),
       floatingActionButton: FloatingActionButton(
         elevation: 8,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.green,
+        backgroundColor: Colors.green,
+        foregroundColor: Colors.white,
         onPressed: () {
           _createTaskDialog();
         }, // task bloc update events
@@ -64,9 +64,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget taskList(List<Task> data) {
     if (bloc.getTasks().isEmpty) {
-      return Text('Get ready for tomorrow \nAdd some tasks!',
+      return Text('Get ready for tomorrow, \nAdd some tasks!',
           textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.white, fontSize: 20.0));
+          style: TextStyle(color: Colors.green, fontSize: 24.0));
     } else {
       return Padding(
         padding: const EdgeInsets.only(top: 8.0),
