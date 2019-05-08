@@ -10,13 +10,14 @@ class ReorderableListSimple extends StatefulWidget {
   ReorderableListSimple({
     @required this.children,
     @required this.onReorder,
+
     this.allowReordering = true,
     this.childrenAlreadyHaveListener = false,
     this.handleSide = ReorderableListSimpleSide.Left,
     this.handleIcon,
     this.padding,
   });
-
+ 
   final bool allowReordering;
   final bool childrenAlreadyHaveListener;
   final ReorderableListSimpleSide handleSide;
@@ -58,6 +59,7 @@ class _ReorderableListSimpleState extends State<ReorderableListSimple> {
 
   Widget _buildReorderableItem(BuildContext context, int index) {
     return ReorderableItemSimple(
+      index: index,
       key: Key(_children[index].hashCode.toString()),
       innerItem: _children[index],
       allowReordering: widget.allowReordering,
@@ -123,6 +125,7 @@ class _ReorderableListSimpleState extends State<ReorderableListSimple> {
 class ReorderableItemSimple extends StatelessWidget {
   ReorderableItemSimple({
     @required Key key,
+    @required this.index,
     @required this.innerItem,
     this.allowReordering = true,
     this.childrenAlreadyHaveListener = false,
@@ -130,6 +133,7 @@ class ReorderableItemSimple extends StatelessWidget {
     this.handleIcon,
   }) : super(key: key);
 
+  final int index;
   final bool allowReordering;
   final bool childrenAlreadyHaveListener;
   final ReorderableListSimpleSide handleSide;
@@ -149,6 +153,12 @@ class ReorderableItemSimple extends StatelessWidget {
     }
     assert(theme.brightness != null);
     return null;
+  }
+
+  Task getTask(widget) {
+    int index = widget
+        .indexWhere((Widget w) => Key(w.hashCode.toString()) == widget.key);
+    return bloc.getTasks()[index];
   }
 
   Widget _buildInnerItem(BuildContext context) {
@@ -180,18 +190,19 @@ class ReorderableItemSimple extends StatelessWidget {
 
     final ThemeData theme = Theme.of(context);
     final ListTileTheme tileTheme = ListTileTheme.of(context);
-
+    Color taskColor = bloc.getTasks()[this.index].color;
     return IconTheme.merge(
-      data: IconThemeData(color: _iconColor(theme, tileTheme)),
+      data: IconThemeData(color: taskColor),
       child: row,
     );
   }
 
   BoxDecoration _decoration(BuildContext context, ReorderableItemState state) {
     final ThemeData theme = Theme.of(context);
+    Color taskColor = bloc.getTasks()[this.index].color[100];
     if (state == ReorderableItemState.dragProxy ||
         state == ReorderableItemState.dragProxyFinished) {
-      return BoxDecoration(color: Colors.green[100]);
+      return BoxDecoration(color: taskColor);
     } else {
       bool placeholder = state == ReorderableItemState.placeholder;
       return BoxDecoration(

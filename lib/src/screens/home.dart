@@ -30,7 +30,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       backgroundColor: Colors.green[50],
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.green[300],
         title: Text(
           widget.title,
         ),
@@ -48,9 +48,9 @@ class _MyHomePageState extends State<MyHomePage> {
           stream: bloc.getSubject().stream,
           builder: (context, snapshot) => taskList(snapshot.data) )),
       floatingActionButton: FloatingActionButton(
-        elevation: 8,
-        backgroundColor: Colors.green,
-        foregroundColor: Colors.white,
+        elevation: 10,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.green[300],
         onPressed: () {
           _createTaskDialog();
         }, // task bloc update events
@@ -102,12 +102,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   },
                   fullscreenDialog: true))
               .then((val) =>
-                  {FlutterStatusbarcolor.setStatusBarColor(Colors.green)});
+                  {FlutterStatusbarcolor.setStatusBarColor(Colors.green[300])});
         },
         child: Container(
           decoration: BoxDecoration(
               border: new Border(
-                  left: new BorderSide(width: 1.0, color: theme.primaryColor))),
+                  left: new BorderSide(width: 1.0, color: task.color))),
           child: Column(
             key: new UniqueKey(),
             mainAxisSize: MainAxisSize.min,
@@ -119,7 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Text(task.title,
                           textAlign: TextAlign.left,
                           style: TextStyle(
-                              color: theme.primaryColor,
+                              color: task.color,
                               fontSize: 20.0,
                               fontWeight: FontWeight.bold)))),
               Align(
@@ -129,7 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Text(task.description,
                           textAlign: TextAlign.left,
                           style: TextStyle(
-                              color: theme.primaryColor,
+                              color: task.color,
                               fontSize: 16.0,
                               fontStyle: FontStyle.italic)))),
             ],

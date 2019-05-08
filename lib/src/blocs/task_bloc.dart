@@ -26,21 +26,28 @@ class TaskBloc {
   }
 
   updateTasks(title, description, type) {
-    Task newTask = new Task(id: _tasks.length, title: title, description: description, type: type);
+    Task newTask = new Task(id: _tasks.length, index:_tasks.length, title: title, description: description, type: type, color:Colors.green);
     this._tasks.add(newTask);
     _taskSubject.sink.add(this._tasks);
     _insert(newTask);
     //this.dispose();
   }
 
-  setTaskColor(int id, Color color) {
-    _tasks[id].setColor(color);
+  setTaskColor(int index, Color color) {
+    this._tasks[index].setColor(color);
+     _taskSubject.sink.add(this._tasks);
   }
 
   swap(int draggedItem, int newPosition) {
     Task swappedTask = _tasks[draggedItem];
+
+    // swap task object
     this._tasks[draggedItem] = this._tasks[newPosition];
     this._tasks[newPosition] = swappedTask;
+
+    // swap task index
+    this._tasks[draggedItem].setIndex(draggedItem);
+    this._tasks[newPosition].setIndex(newPosition);
     //_taskSubject.sink.add(this._tasks);
     //this.dispose();
   }
