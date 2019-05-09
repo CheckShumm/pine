@@ -17,26 +17,24 @@ class ViewTask extends StatefulWidget {
 class _ViewTaskState extends State<ViewTask> {
   @override
   Widget build(BuildContext context) {
-    return new 
-       StreamBuilder<List<Task>>(
-          stream: bloc.getSubject().stream,
-          builder: (context, snapshot) => _viewTask(snapshot.data[widget.task.index]));
-        
+    return new StreamBuilder<List<Task>>(
+        stream: bloc.getSubject().stream,
+        builder: (context, snapshot) =>
+            _viewTask(snapshot.data[widget.task.index]));
   }
 
   // Returns a the body of the task view
   _viewTask(Task task) {
     print("task ID: " + task.id.toString());
     print("task index: " + task.index.toString());
+    Color backgroundColor = bloc.getTasks()[task.index].color[50];
+    Color taskColor = bloc.getTasks()[task.index].color[400];
+    FlutterStatusbarcolor.setStatusBarColor(taskColor);
 
-    FlutterStatusbarcolor.setStatusBarColor(task.color);
-    Color backgroundColor = bloc.getTasks()[task.index].color[100];
-    //Color backgroundColor = task.color.withOpacity(100.0);
-    //Color backgroundColor = Colors.red[100];
     return Scaffold(
         backgroundColor: backgroundColor,
         appBar: new AppBar(
-          backgroundColor: task.color,
+          backgroundColor: taskColor,
           actions: <Widget>[
             Padding(
               padding: const EdgeInsets.only(right: 16.0),
@@ -47,40 +45,36 @@ class _ViewTaskState extends State<ViewTask> {
           title: null,
         ),
         body: Container(
-                color: backgroundColor,
+          color: backgroundColor,
+          child: Column(
+            children: <Widget>[
+              ClipPath(
+                  clipper: CustomShapeClipper(),
+                  child: Container(
+                      height: MediaQuery.of(context).size.height * 0.20,
+                      color: taskColor,
+                      child: Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(left: 32.0),
+                            child: Text(widget.task.title,
+                                style: TextStyle(
+                                    fontSize: 30.0, color: Colors.white)),
+                          )
+                        ],
+                      ))),
+              Padding(
+                padding: EdgeInsets.all(32.0),
                 child: Column(
                   children: <Widget>[
-                    ClipPath(
-                        clipper: CustomShapeClipper(),
-                        child: Container(
-                            height: MediaQuery.of(context).size.height * 0.30,
-                            color: task.color,
-                            child: Row(
-                              children: <Widget>[
-                                Padding(
-                                  padding: EdgeInsets.only(left: 32.0),
-                                  child: Text(widget.task.title,
-                                      style: TextStyle(
-                                          fontSize: 30.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white)),
-                                )
-                              ],
-                            ))),
-                    Padding(
-                      padding: EdgeInsets.all(32.0),
-                      child: Column(
-                        children: <Widget>[
-                          Text(widget.task.description,
-                              style: TextStyle(
-                                  fontSize: 18.0, color: task.color)),
-                          ColorDropDown(
-                              task: task),
-                        ],
-                      ),
-                    ),
+                    Text(widget.task.description,
+                        style: TextStyle(fontSize: 18.0, color: taskColor)),
+                    ColorDropDown(task: task),
                   ],
                 ),
-              ));}
-  
+              ),
+            ],
+          ),
+        ));
+  }
 }

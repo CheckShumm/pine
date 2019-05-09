@@ -1,108 +1,60 @@
 import 'package:flutter/material.dart';
 import 'package:pine/src/blocs/task_bloc.dart';
-import 'package:pine/src/data/database_helper.dart';
 
-class CreateTaskDialog extends StatefulWidget {
+class CreateTask extends StatefulWidget {
   @override
-  _CreateTaskDialogState createState() => _CreateTaskDialogState();
+  _CreateTaskState createState() => _CreateTaskState();
 }
 
-class _CreateTaskDialogState extends State<CreateTaskDialog> {
-  TextEditingController titleController = new TextEditingController();
-  TextEditingController descriptionController = new TextEditingController();
-  TextEditingController typeController = new TextEditingController();
-
+class _CreateTaskState extends State<CreateTask> {
   @override
   Widget build(BuildContext context) {
+    TextEditingController taskController = new TextEditingController();
     final ThemeData theme = Theme.of(context);
-    final double width = MediaQuery.of(context).size.width;
-
-    return new AlertDialog(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(32.0))),
-      contentPadding: EdgeInsets.only(top: 10.0),
-      content: Container(
-        width: 300.0,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Card(
+        elevation: 8.0,
+        color: Colors.white,
+        child: new Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
-                  child: Text(
-                    "Add Task",
-                    style: TextStyle(
-                      fontSize: 24.0,
-                      color: theme.primaryColor,
-                    ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                width: 300,
+                height: 50,
+                child: TextFormField(
+                  maxLines: 1,
+                  controller: taskController,
+                  decoration: InputDecoration(
+                    hintText: "E.g. Homework",
+                    labelText: 'Add a Task',
+                    labelStyle: new TextStyle(fontSize: 20.0),
+                    border: InputBorder.none,
                   ),
                 ),
-                Divider(
-                  color: theme.primaryColor,
-                  height: 4.0,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 16.0, right: 16.0),
-                  child: TextField(
-                    controller: titleController,
-                    decoration: InputDecoration(
-                      hintText: "E.g. Math Homework",
-                      hintStyle: new TextStyle(color: theme.primaryColor),
-                      labelText: 'Task',
-                      border: InputBorder.none,
-                    ),
-                    maxLines: 1,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 5.0,
-            ),
-            Divider(
-              color: theme.primaryColor,
-              height: 4.0,
+              ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 16.0, right: 16.0),
-              child: TextField(
-                controller: descriptionController,
-                textAlign: TextAlign.left,
-                decoration: InputDecoration(
-                  hintText: "E.g. \nAssignment 3 \nquestions 3-5",
-                  hintStyle: new TextStyle(color: theme.primaryColor),
-                  labelText: 'Description',
-                  border: InputBorder.none,
-                ),
-                maxLines: 5,
-              ),
-            ),
-            InkWell(
-              onTap: () {
-                bloc.updateTasks(titleController.text,
-                    descriptionController.text, typeController.text);
-                Navigator.pop(context);
-              },
+              padding: const EdgeInsets.all(16.0),
               child: Container(
-                padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
-                decoration: BoxDecoration(
-                  color: theme.primaryColor,
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(32.0),
-                      bottomRight: Radius.circular(32.0)),
-                ),
-                child: Text(
-                  "Create Task",
-                  style: TextStyle(color: Colors.white),
-                  textAlign: TextAlign.center,
-                ),
+                width: 42,
+                height: 42,
+                child: FloatingActionButton(
+                    elevation: 4,
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.green[300],
+                    onPressed: () {
+                      if (taskController.text.isNotEmpty) {
+                        bloc.updateTasks(taskController.text, "asd", "type");
+                      }
+                      FocusScope.of(context).requestFocus(new FocusNode());
+                    }, // task bloc update events
+                    tooltip: 'Increment',
+                    child: Icon(Icons.add)),
               ),
-            ),
+            )
           ],
         ),
       ),

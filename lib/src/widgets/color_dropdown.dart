@@ -12,7 +12,7 @@ class ColorDropDown extends StatefulWidget {
   final Map<String, Color> colors = {
     "Red": Colors.red,
     "Orange": Colors.orange,
-    "Yellow": Colors.yellow,
+    "Amber": Colors.amber,
     "Green": Colors.green,
     "Blue": Colors.blue,
     "Indigo": Colors.indigo,

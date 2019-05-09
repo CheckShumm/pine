@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pine/src/screens/card_view.dart';
 import 'package:pine/src/screens/home.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 
