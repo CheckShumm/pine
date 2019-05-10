@@ -108,7 +108,7 @@ class _ReorderableListSimpleState extends State<ReorderableListSimple> {
           _children.insert(newPositionIndex, item);
         });
         
-        bloc.swap(draggingIndex, newPositionIndex);
+        taskBloc.swap(draggingIndex, newPositionIndex);
         
 
         return true;
@@ -158,7 +158,7 @@ class ReorderableItemSimple extends StatelessWidget {
   Task getTask(widget) {
     int index = widget
         .indexWhere((Widget w) => Key(w.hashCode.toString()) == widget.key);
-    return bloc.getTasks()[index];
+    return taskBloc.getTasks()[index];
   }
 
   Widget _buildInnerItem(BuildContext context) {
@@ -190,7 +190,7 @@ class ReorderableItemSimple extends StatelessWidget {
 
     final ThemeData theme = Theme.of(context);
     final ListTileTheme tileTheme = ListTileTheme.of(context);
-    Color taskColor = bloc.getTasks()[this.index].color;
+    Color taskColor = taskBloc.getTasks()[this.index].color;
     return IconTheme.merge(
       data: IconThemeData(color: taskColor),
       child: row,
@@ -199,7 +199,7 @@ class ReorderableItemSimple extends StatelessWidget {
 
   BoxDecoration _decoration(BuildContext context, ReorderableItemState state) {
     final ThemeData theme = Theme.of(context);
-    Color taskColor = bloc.getTasks()[this.index].color[100];
+    Color taskColor = taskBloc.getTasks()[this.index].color[100];
     if (state == ReorderableItemState.dragProxy ||
         state == ReorderableItemState.dragProxyFinished) {
       return BoxDecoration(color: taskColor);

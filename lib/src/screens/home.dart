@@ -23,7 +23,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    bloc.getTasks();
+    taskBloc.getTasks();
   }
 
   @override
@@ -32,7 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: Colors.green[50],
       appBar: AppBar(
         backgroundColor: Colors.green[300],
-        title: Text(widget.title, style: TextStyle(fontSize: 24.0)),
+        title: Text(widget.title, style: TextStyle(fontSize: 20.0)),
         centerTitle: true,
         actions: <Widget>[
           Padding(
@@ -43,47 +43,51 @@ class _MyHomePageState extends State<MyHomePage> {
         elevation: 0.0,
       ),
       drawer: Drawer(),
-      body: GestureDetector(
-        onTap: () {
-           FocusScope.of(context).requestFocus(new FocusNode());
-        },
-              child: Stack(
-          children: <Widget>[
-            
-            Container(
-              height: MediaQuery.of(context).size.height * 0.75,
-              child: Center(
-                          child: StreamBuilder<List<Task>>(
-                    stream: bloc.getSubject().stream,
-                    builder: (context, snapshot) => taskList(snapshot.data)),
-              ),
-            ),
-            Align(alignment: FractionalOffset.bottomCenter,child: CreateTask())
-            
-          ],
-        ),
+      body: Stack(
+        children: <Widget>[
+          GestureDetector(
+              onTap: () {
+                FocusScope.of(context).requestFocus(new FocusNode());
+              },
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.75,
+                child: Center(
+                  child: StreamBuilder<List<Task>>(
+                      stream: taskBloc.getSubject().stream,
+                      builder: (context, snapshot) => taskList(snapshot.data)),
+                ),
+              )),
+          Align(alignment: FractionalOffset.bottomCenter, child: CreateTask(isSubtask: false, labelIcon: Icon(Icons.playlist_add), labeltext: "Create a Task",))
+        ],
       ),
-
-      // floatingActionButton: FloatingActionButton(
-      //   elevation: 10,
-      //   backgroundColor: Colors.white,
-      //   foregroundColor: Colors.green[300],
-      //   onPressed: () {
-      //     _createTaskDialog();
-      //   }, // task bloc update events
-      //   tooltip: 'Increment',
-      //   child: Icon(Icons.add),
-      // ),
     );
+
+    // floatingActionButton: FloatingActionButton(
+    //   elevation: 10,
+    //   backgroundColor: Colors.white,
+    //   foregroundColor: Colors.green[300],
+    //   onPressed: () {
+    //     _createTaskDialog();
+    //   }, // task taskBloc update events
+    //   tooltip: 'Increment',
+    //   child: Icon(Icons.add),
+    // ),
+  }
+
+  onCreate(taskController) {
+    if (taskController.text.isNotEmpty) {
+      taskBloc.createTask(taskController.text, "description", "type");
+    }
+    FocusScope.of(context).requestFocus(new FocusNode());
   }
 
   void _reorderCallBack(int oldIndex, int newIndex) {}
 
   Widget taskList(List<Task> data) {
-    if (bloc.getTasks().isEmpty) {
+    if (taskBloc.getTasks().isEmpty) {
       return Text('Get ready for tomorrow, \nAdd some tasks!',
           textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.green, fontSize: 24.0));
+          style: TextStyle(color: Colors.green, fontSize: 20.0));
     } else {
       return Padding(
         padding: const EdgeInsets.only(top: 8.0),
@@ -127,16 +131,22 @@ class _MyHomePageState extends State<MyHomePage> {
                   left: new BorderSide(width: 1.0, color: task.color))),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                    padding: EdgeInsets.only(left: 16.0),
-                    child: Text(task.title,
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          color: task.color,
-                          fontSize: 22.0,
-                        )))),
+            child: Row(
+              children: <Widget>[
+                Icon(task.iconData, color: task.color),
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Text(task.title,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            color: task.color,
+                            fontSize: 18.0,
+                          )),
+                    )),
+              ],
+            ),
           ),
         ),
       ),

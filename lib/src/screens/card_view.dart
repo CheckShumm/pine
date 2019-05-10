@@ -17,12 +17,12 @@ class _CardViewState extends State<CardView> {
   Widget build(BuildContext context) {
     
     return StreamBuilder<List<Task>>(
-        stream: bloc.getSubject().stream,
+        stream: taskBloc.getSubject().stream,
         builder: (context, snapshot) => taskList(snapshot.data));
   }
 
   Widget taskList(List<Task> data) {
-    if (bloc.getTasks().isEmpty) {
+    if (taskBloc.getTasks().isEmpty) {
       return Text('Get ready for tomorrow, \nAdd some tasks!',
           textAlign: TextAlign.center,
           style: TextStyle(color: Colors.green, fontSize: 24.0));

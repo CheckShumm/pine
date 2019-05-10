@@ -31,7 +31,7 @@ class _ColorDropDownState extends State<ColorDropDown> {
   Widget build(BuildContext context) {
     return DropdownButton(
       hint: colorCircle(widget.task.color),
-      elevation: 8,
+      elevation: 0,
       items:
           widget.colors.keys.map<DropdownMenuItem<Color>>((String colorString) {
         return DropdownMenuItem<Color>(
@@ -41,7 +41,7 @@ class _ColorDropDownState extends State<ColorDropDown> {
                 child: colorCircle(widget.colors[colorString])));
       }).toList(),
       onChanged: (value) {
-        bloc.setTaskColor(widget.task.index, value);
+        taskBloc.setTaskColor(widget.task.index, value);
         FlutterStatusbarcolor.setStatusBarColor(widget.task.color);
       },
     );

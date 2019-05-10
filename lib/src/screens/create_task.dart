@@ -2,6 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:pine/src/blocs/task_bloc.dart';
 
 class CreateTask extends StatefulWidget {
+  @required
+  final String labeltext;
+  @required
+  final Icon labelIcon;
+  @required
+  final onCreate;
+  @required
+  final bool isSubtask;
+  final int index;
+
+  const CreateTask({Key key, this.labeltext, this.labelIcon, this.onCreate, this.isSubtask, this.index})
+      : super(key: key);
+
   @override
   _CreateTaskState createState() => _CreateTaskState();
 }
@@ -16,38 +29,47 @@ class _CreateTaskState extends State<CreateTask> {
       child: Card(
         elevation: 8.0,
         color: Colors.white,
+        shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
         child: new Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(left: 16.0, bottom: 8.0),
               child: Container(
-                width: 300,
+                width: 275,
                 height: 50,
-                child: TextFormField(
+                child: TextField(
                   maxLines: 1,
                   controller: taskController,
                   decoration: InputDecoration(
+                    icon: widget.labelIcon,
                     hintText: "E.g. Homework",
-                    labelText: 'Add a Task',
+                    hintStyle: TextStyle(fontSize: 18.0),
+                    labelText: widget.labeltext,
                     labelStyle: new TextStyle(fontSize: 20.0),
                     border: InputBorder.none,
                   ),
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Container(
-                width: 42,
-                height: 42,
+            Container(
+              width: 50,
+              height: 50,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: FloatingActionButton(
-                    elevation: 4,
+                    elevation: 6,
                     backgroundColor: Colors.white,
                     foregroundColor: Colors.green[300],
                     onPressed: () {
                       if (taskController.text.isNotEmpty) {
-                        bloc.updateTasks(taskController.text, "asd", "type");
+                        if(!widget.isSubtask) {
+                        taskBloc.createTask(taskController.text,
+                            "description placeholder", "type");
+                        } else {
+                          taskBloc.addSubTask(taskController.text, widget.index);
+                        }
                       }
                       FocusScope.of(context).requestFocus(new FocusNode());
                     }, // task bloc update events
