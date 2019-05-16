@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pine/src/blocs/task_bloc.dart';
+import 'package:pine/src/data/task.dart';
 
 class CreateTask extends StatefulWidget {
   @required
@@ -10,9 +11,9 @@ class CreateTask extends StatefulWidget {
   final onCreate;
   @required
   final bool isSubtask;
-  final int index;
+  final Task task;
 
-  const CreateTask({Key key, this.labeltext, this.labelIcon, this.onCreate, this.isSubtask, this.index})
+  const CreateTask({Key key, this.labeltext, this.labelIcon, this.onCreate, this.isSubtask, this.task})
       : super(key: key);
 
   @override
@@ -66,9 +67,9 @@ class _CreateTaskState extends State<CreateTask> {
                       if (taskController.text.isNotEmpty) {
                         if(!widget.isSubtask) {
                         taskBloc.createTask(taskController.text,
-                            "description placeholder", "type");
+                            "description placeholder", "type", -1);
                         } else {
-                          taskBloc.addSubTask(taskController.text, widget.index);
+                          taskBloc.addSubTask(taskController.text, widget.task);
                         }
                       }
                       FocusScope.of(context).requestFocus(new FocusNode());

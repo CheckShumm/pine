@@ -85,7 +85,7 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
             InkWell(
               onTap: () {
                 taskBloc.createTask(titleController.text,
-                    descriptionController.text, typeController.text);
+                    descriptionController.text, typeController.text, -1);
                 Navigator.pop(context);
               },
               child: Container(

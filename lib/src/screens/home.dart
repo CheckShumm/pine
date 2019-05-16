@@ -76,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   onCreate(taskController) {
     if (taskController.text.isNotEmpty) {
-      taskBloc.createTask(taskController.text, "description", "type");
+      taskBloc.createTask(taskController.text, "description", "type", -1);
     }
     FocusScope.of(context).requestFocus(new FocusNode());
   }

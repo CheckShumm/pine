@@ -8,7 +8,7 @@ class DatabaseHelper {
    static final _databaseName = "MyDatabase.db";
   static final _databaseVersion = 1;
 
-  static final table = 'table';
+  static final table = 'task';
   
   static final columnId = '_id';
   static final columnTitle = 'title';
@@ -41,7 +41,7 @@ class DatabaseHelper {
           CREATE TABLE $table (
             $columnId INTEGER PRIMARY KEY,
             $columnTitle TEXT NOT NULL,
-            $columnDescription INTEGER NOT NULL
+            $columnDescription TEXT NOT NULL
           )
           ''');
   }
@@ -79,4 +79,5 @@ Future<int> insert(Map<String, dynamic> row) async {
     return await db.delete(table, where: '$columnId = ?', whereArgs: [id]);
   }
 
+  
 }

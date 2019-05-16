@@ -20,6 +20,11 @@ class Task {
       this.iconData,
       this.subtasks});
 
+
+  setID(int id) {
+    this.id = id;
+  }
+
   setColor(Color color) {
     this.color = color;
   }

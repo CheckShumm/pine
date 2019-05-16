@@ -35,7 +35,7 @@ class _IconDropdownState extends State<IconDropdown> {
                 child: iconContainer(Icon(iconData, color: Colors.white))));
       }).toList(),
       onChanged: (value) {
-        taskBloc.setTaskIcon(widget.task.index, value);
+        taskBloc.setTaskIcon(widget.task, value);
       },
     );
   }

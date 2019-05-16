@@ -10,7 +10,9 @@ import 'package:pine/src/widgets/icon_dropdown.dart';
 
 class ViewTask extends StatefulWidget {
   final Task task;
-  ViewTask({this.task});
+  ViewTask({this.task}) {
+    taskBloc.viewTask(this.task);
+  }
 
   @override
   _ViewTaskState createState() => _ViewTaskState();
@@ -19,16 +21,16 @@ class ViewTask extends StatefulWidget {
 class _ViewTaskState extends State<ViewTask> {
   @override
   Widget build(BuildContext context) {
-    return new StreamBuilder<List<Task>>(
-        stream: taskBloc.getSubject().stream,
-        builder: (context, snapshot) =>
-            _viewTask(snapshot.data[widget.task.index]));
+    return new StreamBuilder<Task>(
+        stream: taskBloc.getTaskSubject().stream,
+        builder: (context, snapshot) => _viewTask(snapshot.data));
   }
 
   // Returns a the body of the task view
   _viewTask(Task task) {
-    Color backgroundColor = taskBloc.getTasks()[task.index].color[50];
-    Color taskColor = taskBloc.getTasks()[task.index].color[400];
+    ColorSwatch colorSwatch = task.color;
+    Color backgroundColor = colorSwatch[50];
+    Color taskColor = colorSwatch[400];
     FlutterStatusbarcolor.setStatusBarColor(taskColor);
     final screenSize = MediaQuery.of(context).size;
     return Scaffold(
@@ -38,7 +40,16 @@ class _ViewTaskState extends State<ViewTask> {
           actions: <Widget>[
             Padding(
               padding: const EdgeInsets.only(right: 16.0),
-              child: Icon(Icons.edit),
+              child: IconButton(
+                icon: Icon(Icons.delete, color: Colors.white),
+                tooltip: "delete",
+                onPressed: () {
+                  Navigator.pop(context);
+                  Future.delayed(const Duration(milliseconds: 3000));
+                  print("DELETE");
+                  taskBloc.deleteTask(task);
+                },
+              ),
             ),
           ],
           elevation: 0,
@@ -102,7 +113,7 @@ class _ViewTaskState extends State<ViewTask> {
             Align(
                 alignment: FractionalOffset.bottomCenter,
                 child: CreateTask(
-                  index: task.index,
+                  task: task,
                   isSubtask: true,
                   labelIcon: Icon(Icons.playlist_add_check),
                   labeltext: "Add a Subtask",
@@ -125,20 +136,24 @@ class _ViewTaskState extends State<ViewTask> {
     return Container(
       height: 64,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Card(elevation: 8.0, color: Colors.white, child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Text(subtask, style: TextStyle(fontSize: 16, color: widget.task.color)),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: Icon(Icons.check_circle_outline),
-            )
-          ],
-        )),
+        padding: const EdgeInsets.only(top: 4.0, left: 4.0, right: 4.0),
+        child: Card(
+            elevation: 8.0,
+            color: Colors.white,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Text(subtask,
+                      style: TextStyle(fontSize: 16, color: widget.task.color)),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: Icon(Icons.check_circle_outline),
+                )
+              ],
+            )),
       ),
     );
   }
