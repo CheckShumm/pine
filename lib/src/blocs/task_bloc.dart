@@ -22,6 +22,7 @@ class TaskBloc {
     print('query all rows:');
     allRows.forEach((row) =>
         this.createTask(row['title'], row['description'], "type", row["_id"]));
+    this._query();
   }
 
   viewTask(Task task) {
@@ -92,24 +93,64 @@ class TaskBloc {
     _taskSubject.sink.add(task);
   }
 
-  swap(int draggedItem, int newPosition) {
-    Task swappedTask = _tasks[draggedItem];
+  swap(int oldPosition, int newPosition) async {
+    Task oldTask = _tasks[oldPosition];
+    Task newTask = _tasks[newPosition];
+    
+    // Change dragged task's index and remove at old index, insert in new index
+    oldTask.setIndex(newPosition);
+    this._tasks.removeAt(oldPosition);
+    this._tasks.insert(newPosition,oldTask);
 
-    // swap task object
-    this._tasks[draggedItem] = this._tasks[newPosition];
-    this._tasks[newPosition] = swappedTask;
+    newTask.setIndex(oldPosition);
+    // this._tasks.removeAt(newPosition);
+    // this._tasks.insert(oldPosition,newTask);
+    print("NEW POS: " + newPosition.toString() + "\OLD POS: " + oldPosition.toString());
 
-    // swap task index
-    this._tasks[draggedItem].setIndex(draggedItem);
-    this._tasks[newPosition].setIndex(newPosition);
+    // update task index
+    updateIndex(oldTask);
+    updateIndex(newTask);
+
+    // // increment index of tasks after new position
+    // int index = newPosition + 1;
+    // while(index > newPosition && index < oldPosition) {
+    //   Task task = this._tasks[index];
+    //  // task.setIndex((index+1));
+    //   print("Updating task " + task.title + " from " + index.toString() + " to " + task.index.toString());
+    //   updateIndex(task);
+    //   index++;
+    // }
+
+    // // decrement index of tasks before new position after oldPosition
+    // index = oldPosition;
+    // while(index >= oldPosition && index < newPosition) {
+    //   Task task = this._tasks[index];
+    //   task.setIndex((index-1));
+    //    print("Updating task " + task.title + " from " + index.toString() + " to " + task.index.toString());
+    //   updateIndex(this._tasks[index]);
+    //   index++;
+    // }
+    this._query();
+  }
+
+  updateIndex(Task task) async {
+        // update task index
+    Map<String, dynamic> row = {
+      DatabaseHelper.columnId: task.id,
+      DatabaseHelper.columnIndex: task.index
+    }; 
+    await databaseHelper.update(row);
   }
 
   void _insert(Task task) async {
     // row to insert
+    print("INDEX" + task.index.toString());
     Map<String, dynamic> row = {
       DatabaseHelper.columnTitle: task.title,
-      DatabaseHelper.columnDescription: task.description
+      DatabaseHelper.columnDescription: task.description,
+      DatabaseHelper.columnIndex: task.index
     };
+    this._query();
     final id = await databaseHelper.insert(row);
     print('inserted ' + task.title + ' @ row $id');
   }

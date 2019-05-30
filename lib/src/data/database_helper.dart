@@ -13,6 +13,7 @@ class DatabaseHelper {
   static final columnId = '_id';
   static final columnTitle = 'title';
   static final columnDescription = 'description';
+  static final columnIndex = 'col_index';
 
   DatabaseHelper._privateConstructor();
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
@@ -41,7 +42,8 @@ class DatabaseHelper {
           CREATE TABLE $table (
             $columnId INTEGER PRIMARY KEY,
             $columnTitle TEXT NOT NULL,
-            $columnDescription TEXT NOT NULL
+            $columnDescription TEXT NOT NULL,
+            $columnIndex INTEGER NOT NULL
           )
           ''');
   }
@@ -54,7 +56,7 @@ Future<int> insert(Map<String, dynamic> row) async {
   // All of the rows are returned as a list
   Future<List<Map<String,dynamic>>> queryAllRows() async {
     Database db = await instance.database;
-    return await db.query(table);
+     return await db.query(table, orderBy: "$columnIndex ASC");
   }
 
   // All of the methods (insert, query, update, delete) can also be done using
