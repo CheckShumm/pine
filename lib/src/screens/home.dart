@@ -8,6 +8,7 @@ import 'package:pine/src/data/task.dart';
 import 'package:pine/src/screens/create_task.dart';
 import 'package:pine/src/screens/create_task.dialog.dart';
 import 'package:pine/src/screens/view_task.dart';
+import 'package:pine/src/utils/app_constants.dart';
 import 'package:pine/src/widgets/ReorderableListSimple.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -76,7 +77,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   onCreate(taskController) {
     if (taskController.text.isNotEmpty) {
-      taskBloc.createTask(taskController.text, "description", "type", -1);
+     taskBloc.createTask(taskController.text,
+                            defaultDescription, defaultType, -1, primaryColor, defaultIcon);
     }
     FocusScope.of(context).requestFocus(new FocusNode());
   }

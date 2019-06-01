@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pine/src/blocs/task_bloc.dart';
 import 'package:pine/src/data/database_helper.dart';
+import 'package:pine/src/utils/app_constants.dart';
 
 class CreateTaskDialog extends StatefulWidget {
   @override
@@ -85,7 +86,7 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
             InkWell(
               onTap: () {
                 taskBloc.createTask(titleController.text,
-                    descriptionController.text, typeController.text, -1);
+                            defaultDescription, defaultType, -1, primaryColor, defaultIcon);
                 Navigator.pop(context);
               },
               child: Container(

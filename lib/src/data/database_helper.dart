@@ -14,6 +14,8 @@ class DatabaseHelper {
   static final columnTitle = 'title';
   static final columnDescription = 'description';
   static final columnIndex = 'col_index';
+  static final columnIcon = "icon";
+  static final columnColor = 'color';
 
   DatabaseHelper._privateConstructor();
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
@@ -43,6 +45,8 @@ class DatabaseHelper {
             $columnId INTEGER PRIMARY KEY,
             $columnTitle TEXT NOT NULL,
             $columnDescription TEXT NOT NULL,
+            $columnColor TEXT NOT NULL,
+            $columnIcon TEXT NOT NULL,
             $columnIndex INTEGER NOT NULL
           )
           ''');

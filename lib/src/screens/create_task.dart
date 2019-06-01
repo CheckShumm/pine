@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pine/src/blocs/task_bloc.dart';
 import 'package:pine/src/data/task.dart';
+import 'package:pine/src/utils/app_constants.dart';
 
 class CreateTask extends StatefulWidget {
   @required
@@ -67,7 +68,7 @@ class _CreateTaskState extends State<CreateTask> {
                       if (taskController.text.isNotEmpty) {
                         if(!widget.isSubtask) {
                         taskBloc.createTask(taskController.text,
-                            "description placeholder", "type", -1);
+                            defaultDescription, defaultType, -1, primaryColor, defaultIcon);
                         } else {
                           taskBloc.addSubTask(taskController.text, widget.task);
                         }

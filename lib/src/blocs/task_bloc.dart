@@ -4,10 +4,14 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:pine/src/data/database_helper.dart';
 import 'package:pine/src/data/task.dart';
+import 'package:pine/src/utils/app_constants.dart';
+import 'package:pine/src/utils/color_constants.dart';
+import 'package:pine/src/utils/icon_constants.dart';
 import 'package:rxdart/rxdart.dart';
 
 class TaskBloc {
   var _tasks = new List<Task>();
+  final defaultColor = Colors.green;
   final _taskListSubject = BehaviorSubject<List<Task>>();
   final _taskSubject = BehaviorSubject<Task>();
 
@@ -21,7 +25,7 @@ class TaskBloc {
     final allRows = await databaseHelper.queryAllRows();
     print('query all rows:');
     allRows.forEach((row) =>
-        this.createTask(row['title'], row['description'], "type", row["_id"]));
+        this.createTask(row['title'], row['description'], "type", row["_id"], row["color"], row["icon"]));
     this._query();
   }
 
@@ -42,15 +46,15 @@ class TaskBloc {
     return _tasks;
   }
 
-  createTask(title, description, type, id) async {
+  createTask(title, description, type, id, color, icon) async {
     Task newTask = new Task(
         index: _tasks.length ,
         title: title,
         description: description,
         type: type,
         subtasks: new List<String>(),
-        color: Colors.green,
-        iconData: Icons.assignment);
+        color: colors[color],
+        iconData: icons[icon]);
 
     if(id == -1) {
       _insert(newTask);
@@ -83,14 +87,25 @@ class TaskBloc {
     _taskListSubject.sink.add(this._tasks);
   }
 
-  setTaskColor(Task task, Color color) {
-    task.setColor(color);
+  setTaskColor(Task task, String color) async {
+    task.setColor(colors[color]);
     _taskSubject.sink.add(task);
+    Map<String, dynamic> row = {
+      DatabaseHelper.columnId: task.id,
+      DatabaseHelper.columnColor: color 
+    }; 
+    await databaseHelper.update(row);
+   
   }
 
-  setTaskIcon(Task task, IconData iconData) {
-    task.setIconData(iconData);
+  setTaskIcon(Task task, String iconString) async {
+    task.setIconData(icons[iconString]);
     _taskSubject.sink.add(task);
+      Map<String, dynamic> row = {
+      DatabaseHelper.columnId: task.id,
+      DatabaseHelper.columnIcon: iconString 
+    }; 
+    await databaseHelper.update(row);
   }
 
   swap(int oldPosition, int newPosition) async {
@@ -105,7 +120,7 @@ class TaskBloc {
     newTask.setIndex(oldPosition);
     // this._tasks.removeAt(newPosition);
     // this._tasks.insert(oldPosition,newTask);
-    print("NEW POS: " + newPosition.toString() + "\OLD POS: " + oldPosition.toString());
+    print("NEW POS: " + newPosition.toString() + "\nOLD POS: " + oldPosition.toString());
 
     // update task index
     updateIndex(oldTask);
@@ -144,11 +159,12 @@ class TaskBloc {
 
   void _insert(Task task) async {
     // row to insert
-    print("INDEX" + task.index.toString());
     Map<String, dynamic> row = {
       DatabaseHelper.columnTitle: task.title,
       DatabaseHelper.columnDescription: task.description,
-      DatabaseHelper.columnIndex: task.index
+      DatabaseHelper.columnIndex: task.index,
+      DatabaseHelper.columnColor: primaryColor,
+      DatabaseHelper.columnIcon: defaultIcon
     };
     this._query();
     final id = await databaseHelper.insert(row);
